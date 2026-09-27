@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-devanagari: "Noto Serif Devanagari", "Cormorant Garamond", serif;
+  
+  --color-gold-50: #fbf8ef;
+  --color-gold-100: #f5eed8;
+  --color-gold-200: #ecdbad;
+  --color-gold-300: #dec17c;
+  --color-gold-400: #cda451;
+  --color-gold-500: #b88d3b;
+  --color-gold-600: #9c6e2e;
+  --color-gold-700: #7b5126;
+  --color-gold-800: #664224;
+  --color-gold-900: #573721;
+}
+
+/* Custom subtle luxury styling */
+html {
+  font-family: var(--font-sans);
+  color: #1c1917;
+  background-color: #fdfbf7;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-devanagari {
+  font-family: var(--font-devanagari);
+}
+
+/* Luxury gold gradient utilities */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #a4762c 0%, #d8b74e 50%, #906423 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #c5a038 0%, #deb756 50%, #af8529 100%);
+}
+
+.gold-border-gradient {
+  border-image: linear-gradient(to right, rgba(197, 160, 56, 0.2), rgba(197, 160, 56, 0.8), rgba(197, 160, 56, 0.2)) 1;
+}
+
+/* Custom scrollbar for gallery and drawers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f7f4ec;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8cbb0;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c5a038;
+}

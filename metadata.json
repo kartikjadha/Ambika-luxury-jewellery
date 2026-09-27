@@ -1,0 +1,6 @@
+{
+  "name": "Shree Ambika Jewellers",
+  "description": "Discover jewellery collections and showroom information from Shree Ambika Jewellers in Roha, Raigad, Maharashtra. Explore collections and enquire directly.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
