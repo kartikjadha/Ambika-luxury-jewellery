@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, MapPin, Phone, MessageCircle, Clock, ShieldCheck, ExternalLink, Sliders } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Navigation, ExternalLink, ShieldCheck, Sliders } from 'lucide-react';
 import { JEWELLER_CONFIG } from '../config/jewellerConfig';
 
 interface FooterProps {
@@ -9,17 +9,17 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onOpenEnquiry, onOpenConfig }) => {
   return (
-    <footer className="bg-[#161412] text-stone-300 pt-16 pb-24 lg:pb-16 border-t border-[#342D28]">
+    <footer className="bg-[#12100E] text-stone-300 pt-16 pb-24 lg:pb-16 border-t border-[#26211C]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#2C2622]">
+        {/* 4 Column Footer Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#241F1A]">
           
-          {/* Brand Info (5 cols) */}
-          <div className="lg:col-span-5 space-y-4">
+          {/* Column 1: Brand (4 cols) */}
+          <div className="lg:col-span-4 space-y-3">
             <div>
               <span className="font-devanagari text-2xl font-bold text-[#DEC17C] block leading-snug">
-                {JEWELLER_CONFIG.businessNameDevanagari}
+                {JEWELLER_CONFIG.businessNameMarathi}
               </span>
               <span className="font-serif text-2xl sm:text-3xl font-bold text-[#FAF7F0] tracking-tight">
                 {JEWELLER_CONFIG.businessName}
@@ -31,111 +31,103 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEnquiry, onOpenConfig }) =
             </p>
 
             <p className="text-xs text-stone-400 leading-relaxed max-w-sm">
-              Roha&apos;s trusted showroom for 100% BIS hallmarked 22K gold ornaments, certified diamonds, and bespoke bridal collections. Established with four generations of customer faith.
+              Discover authentic 22K 916 hallmarked gold, sparkling certified diamonds, and traditional Maharashtrian bridal collections in Roha, Raigad.
             </p>
 
-            <div className="pt-2 flex items-center gap-3 text-xs">
-              <a
-                href={JEWELLER_CONFIG.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-[#EADBB7] transition-colors"
-              >
-                <MapPin className="w-3.5 h-3.5 text-[#C5A038]" />
-                <span>5.0 ★ Google Rating</span>
-              </a>
-
-              {onOpenConfig && (
+            {onOpenConfig && (
+              <div className="pt-2">
                 <button
                   onClick={onOpenConfig}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-stone-400 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-stone-400 hover:text-white transition-colors text-xs"
                 >
                   <Sliders className="w-3.5 h-3.5" />
-                  <span>Customize Demo</span>
+                  <span>Demo Configuration</span>
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
-          {/* Quick Links (2 cols) */}
+          {/* Column 2: Quick Links (2 cols) */}
           <div className="lg:col-span-2 space-y-3">
             <h4 className="text-xs font-semibold text-[#FAF7F0] uppercase tracking-wider">
-              Explore
+              Quick Links
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#collections" className="hover:text-[#DEC17C] transition-colors">Bridal Collection</a>
+                <a href="#" className="hover:text-[#DEC17C] transition-colors">Home</a>
               </li>
               <li>
-                <a href="#collections" className="hover:text-[#DEC17C] transition-colors">Gold Necklaces</a>
+                <a href="#collections" className="hover:text-[#DEC17C] transition-colors">Collections</a>
               </li>
               <li>
-                <a href="#collections" className="hover:text-[#DEC17C] transition-colors">Mangalsutras</a>
+                <a href="#gallery" className="hover:text-[#DEC17C] transition-colors">Gallery</a>
               </li>
               <li>
-                <a href="#collections" className="hover:text-[#DEC17C] transition-colors">Diamond Solitaires</a>
+                <a href="#about" className="hover:text-[#DEC17C] transition-colors">About</a>
               </li>
               <li>
-                <a href="#gallery" className="hover:text-[#DEC17C] transition-colors">Photo Gallery</a>
-              </li>
-              <li>
-                <a href="#video" className="hover:text-[#DEC17C] transition-colors">Showroom Film</a>
+                <a href="#enquiry" className="hover:text-[#DEC17C] transition-colors">Contact</a>
               </li>
             </ul>
           </div>
 
-          {/* Showroom Timings (2 cols) */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-semibold text-[#FAF7F0] uppercase tracking-wider">
-              Timings
-            </h4>
-            <div className="space-y-2 text-xs text-stone-400">
-              <div>
-                <span className="text-stone-300 block font-medium">Mon – Thu:</span>
-                <span>10:30 AM – 8:00 PM</span>
-              </div>
-              <div>
-                <span className="text-stone-300 block font-medium">Friday:</span>
-                <span className="text-amber-400">Weekly Closed</span>
-              </div>
-              <div>
-                <span className="text-stone-300 block font-medium">Sat – Sun:</span>
-                <span>10:30 AM – 8:00 PM</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Details (3 cols) */}
+          {/* Column 3: Connect (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-xs font-semibold text-[#FAF7F0] uppercase tracking-wider">
-              Showroom Contact
+              Connect
+            </h4>
+            <ul className="space-y-2.5 text-xs text-stone-300">
+              <li>
+                <a 
+                  href={JEWELLER_CONFIG.getPhoneUrl()} 
+                  className="hover:text-[#DEC17C] transition-colors flex items-center gap-2"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#DEC17C]" />
+                  <span>Call: {JEWELLER_CONFIG.phone}</span>
+                </a>
+              </li>
+              <li>
+                <a 
+                  href={JEWELLER_CONFIG.getWhatsAppUrl()} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-[#DEC17C] transition-colors flex items-center gap-2"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                  <span>WhatsApp: {JEWELLER_CONFIG.phone}</span>
+                </a>
+              </li>
+              <li>
+                <a 
+                  href={JEWELLER_CONFIG.googleMapsUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-[#DEC17C] transition-colors flex items-center gap-2"
+                >
+                  <Navigation className="w-3.5 h-3.5 text-[#DEC17C]" />
+                  <span>Google Maps Listing (5.0 ★)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Visit Us (3 cols) */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-xs font-semibold text-[#FAF7F0] uppercase tracking-wider">
+              Visit Us
             </h4>
             
-            <div className="space-y-2.5 text-xs text-stone-300">
+            <div className="text-xs text-stone-400 space-y-2">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#DEC17C] shrink-0 mt-0.5" />
-                <p className="leading-snug">
+                <p className="leading-relaxed">
                   {JEWELLER_CONFIG.address}
                 </p>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#DEC17C] shrink-0" />
-                <a href={JEWELLER_CONFIG.getPhoneUrl()} className="hover:text-white transition-colors">
-                  {JEWELLER_CONFIG.phone}
-                </a>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-[#25D366] shrink-0" />
-                <a 
-                  href={JEWELLER_CONFIG.getWhatsAppUrl()} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  WhatsApp: +{JEWELLER_CONFIG.whatsappNumber}
-                </a>
+              <div className="pt-1 text-[11px] text-stone-500">
+                <span>Hours: Mon–Thu & Sat–Sun: 10:30 AM – 8:00 PM</span>
+                <span className="block text-amber-500">Friday Closed</span>
               </div>
             </div>
 
@@ -151,24 +143,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEnquiry, onOpenConfig }) =
 
         </div>
 
-        {/* Bottom Copyright & Hallmark Assurance */}
+        {/* Bottom Credits with Exact Requirement */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#C5A038]" />
-            <span>Guaranteed 100% BIS Hallmarked 916 Gold & Computerized Scales</span>
+          <div>
+            © 2026 {JEWELLER_CONFIG.businessName}. All Rights Reserved.
           </div>
 
-          <div className="flex items-center gap-4">
-            <a 
-              href={JEWELLER_CONFIG.googleMapsUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-[#DEC17C] hover:underline flex items-center gap-1"
-            >
-              <span>Google Maps Listing</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
-            <span>© {new Date().getFullYear()} {JEWELLER_CONFIG.businessName}. All rights reserved.</span>
+          <div className="text-[#DEC17C] font-medium">
+            {JEWELLER_CONFIG.developerCredit}
           </div>
         </div>
 

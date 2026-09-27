@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { X, MessageCircle, Phone, Sparkles, Check, ShieldCheck, Share2, MapPin } from 'lucide-react';
+import { X, MessageCircle, Phone, Sparkles, Check, ShieldCheck, Share2, MapPin, Heart } from 'lucide-react';
 import { JEWELLER_CONFIG, JewelleryItem } from '../config/jewellerConfig';
 
 interface ProductDetailModalProps {
   item: JewelleryItem | null;
   onClose: () => void;
   onOpenEnquiryForm: (itemName: string) => void;
+  isSaved?: boolean;
+  onToggleWishlist?: (id: string) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   item,
   onClose,
   onOpenEnquiryForm,
+  isSaved = false,
+  onToggleWishlist,
 }) => {
   if (!item) return null;
 
@@ -45,13 +49,30 @@ Please share current pricing, weight details, and availability at your Roha show
             <span className="font-devanagari">{JEWELLER_CONFIG.businessNameDevanagari}</span>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-[#EFE5D0] rounded-full transition-colors"
-            aria-label="Close modal"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {onToggleWishlist && (
+              <button
+                onClick={() => onToggleWishlist(item.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                  isSaved
+                    ? 'bg-[#FAF7F0] text-[#85611E] border border-[#DECFB3]'
+                    : 'bg-white text-stone-600 hover:text-stone-900 border border-stone-200'
+                }`}
+                title={isSaved ? 'Remove from saved wishlist' : 'Save to wishlist'}
+              >
+                <Heart className={`w-3.5 h-3.5 ${isSaved ? 'fill-[#C5A038] text-[#C5A038]' : ''}`} />
+                <span>{isSaved ? 'Saved' : 'Save'}</span>
+              </button>
+            )}
+
+            <button
+              onClick={onClose}
+              className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-[#EFE5D0] rounded-full transition-colors"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Body: Two Column Layout */}

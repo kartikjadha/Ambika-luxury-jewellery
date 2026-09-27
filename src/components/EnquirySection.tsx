@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageCircle, Phone, Navigation, Send, CheckCircle2, AlertCircle, Sparkles, Clock, ShieldCheck } from 'lucide-react';
+import { MessageCircle, Phone, Send, CheckCircle2, AlertCircle, Sparkles, ShieldCheck } from 'lucide-react';
 import { JEWELLER_CONFIG } from '../config/jewellerConfig';
 
 interface EnquirySectionProps {
@@ -11,7 +11,6 @@ export const EnquirySection: React.FC<EnquirySectionProps> = ({ initialInterest 
   const [mobile, setMobile] = useState('');
   const [interestedIn, setInterestedIn] = useState(initialInterest || 'Gold Jewellery');
   const [message, setMessage] = useState('');
-  const [preferredTime, setPreferredTime] = useState('Morning (11 AM - 2 PM)');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,8 +24,6 @@ export const EnquirySection: React.FC<EnquirySectionProps> = ({ initialInterest 
     'Bangles',
     'Chain',
     'Mangalsutra',
-    'Gold Exchange Valuation',
-    'Custom Order',
     'Other',
   ];
 
@@ -34,313 +31,213 @@ export const EnquirySection: React.FC<EnquirySectionProps> = ({ initialInterest 
     e.preventDefault();
     setError(null);
 
-    // Validation
+    // Form validation
     if (!name.trim()) {
-      setError('Please provide your full name.');
+      setError('Please enter your full name.');
       return;
     }
-    const cleanMobile = mobile.replace(/\D/g, '');
-    if (cleanMobile.length < 10) {
-      setError('Please enter a valid 10-digit mobile number.');
+    const cleanDigits = mobile.replace(/\D/g, '');
+    if (cleanDigits.length < 10) {
+      setError('Please provide a valid 10-digit mobile number.');
       return;
     }
 
-    // Set demo submission state
     setSubmitted(true);
   };
 
-  const getCustomWhatsAppLink = () => {
+  const getForwardWhatsAppUrl = () => {
     const text = `Hello Shree Ambika Jewellers,
-My Name: ${name || 'Customer'}
+Name: ${name || 'Customer'}
 Mobile: ${mobile || 'Not specified'}
 Interested In: ${interestedIn}
-Preferred Time: ${preferredTime}
-Message: ${message || 'I would like more information on this design and live pricing.'}
+Message: ${message || 'I would like to enquire about jewellery designs and live pricing.'}
 
-Found you on your official website.`;
+Found you through your official website.`;
     return `https://wa.me/${JEWELLER_CONFIG.whatsappNumber}?text=${encodeURIComponent(text)}`;
   };
 
   return (
-    <section id="enquiry" className="py-16 sm:py-20 bg-gradient-to-b from-[#FAF7F0] to-[#FCFBF8] border-t border-[#EAE2D2]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="enquiry" className="py-16 sm:py-20 bg-[#161412] text-white border-t border-[#342D28] relative overflow-hidden">
+      {/* Subtle gold decorative glow */}
+      <div className="absolute top-0 right-1/3 w-80 h-80 bg-[#C5A038]/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium text-[#7B5126] mb-2 uppercase tracking-widest">
-            <MessageCircle className="w-4 h-4 text-[#85611E]" />
-            <span>Direct Inquiries</span>
-            <span aria-hidden="true">·</span>
-            <span>Roha Showroom</span>
+          <div className="flex items-center justify-center gap-2 text-xs font-semibold text-[#DEC17C] uppercase tracking-widest mb-2">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Dedicated Consultation</span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1D1917] tracking-tight">
-            Send an Enquiry
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#FAF7F0]">
+            Looking for Something Special?
           </h2>
-          <p className="font-devanagari text-lg sm:text-xl text-[#7B5126] font-medium mt-1">
-            चौकशी करा किंवा भेट निश्चित करा
+          <p className="font-devanagari text-lg sm:text-xl text-[#DEC17C] font-medium mt-1">
+            आपल्या आवडीचे दागिने निवडण्यासाठी आमच्याशी संपर्क साधा
           </p>
-          <p className="text-sm sm:text-base text-[#575047] mt-3">
-            Have questions about live 22K gold rates, bridal bookings, or custom jewellery? Send us a message or chat directly on WhatsApp.
+          <p className="text-sm sm:text-base text-stone-300 mt-3">
+            Tell us what you&apos;re looking for and our team can assist you.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start max-w-5xl mx-auto">
-          
-          {/* Left Column: Quick Contact Channels */}
-          <div className="lg:col-span-5 space-y-5">
-            <div className="p-6 bg-white rounded-2xl border border-[#E8DFCF] shadow-xs">
-              <h3 className="font-serif text-xl font-bold text-[#1D1917] mb-2">
-                Instant Showroom Assistance
+        {/* Main Enquiry Form Container */}
+        <div className="max-w-2xl mx-auto bg-[#201C18] border border-[#DEC17C]/30 rounded-2xl p-6 sm:p-10 shadow-2xl">
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              
+              {error && (
+                <div className="p-3 bg-red-950/80 border border-red-500/50 text-red-200 text-xs rounded-lg flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {/* Name */}
+              <div>
+                <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your full name"
+                  className="w-full px-4 py-3 rounded-lg bg-stone-900 border border-stone-700 text-white placeholder-stone-500 text-sm focus:outline-none focus:border-[#DEC17C] focus:ring-1 focus:ring-[#DEC17C] transition-all"
+                />
+              </div>
+
+              {/* Mobile Number */}
+              <div>
+                <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
+                  Mobile Number *
+                </label>
+                <input
+                  type="tel"
+                  required
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  placeholder="10-digit mobile number"
+                  className="w-full px-4 py-3 rounded-lg bg-stone-900 border border-stone-700 text-white placeholder-stone-500 text-sm focus:outline-none focus:border-[#DEC17C] focus:ring-1 focus:ring-[#DEC17C] transition-all"
+                />
+              </div>
+
+              {/* Interested In Dropdown */}
+              <div>
+                <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
+                  Interested In *
+                </label>
+                <select
+                  value={interestedIn}
+                  onChange={(e) => setInterestedIn(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-stone-900 border border-stone-700 text-white text-sm focus:outline-none focus:border-[#DEC17C] focus:ring-1 focus:ring-[#DEC17C] transition-all"
+                >
+                  {interestOptions.map((opt) => (
+                    <option key={opt} value={opt} className="bg-stone-900 text-white">
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Message */}
+              <div>
+                <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
+                  Message (Optional)
+                </label>
+                <textarea
+                  rows={3}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Design preferences, wedding date, or custom requirement..."
+                  className="w-full px-4 py-3 rounded-lg bg-stone-900 border border-stone-700 text-white placeholder-stone-500 text-sm focus:outline-none focus:border-[#DEC17C] focus:ring-1 focus:ring-[#DEC17C] transition-all"
+                />
+              </div>
+
+              {/* Primary Submit Button */}
+              <button
+                type="submit"
+                className="w-full py-3.5 px-6 bg-[#DEC17C] hover:bg-[#C5A038] text-[#161412] text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-4"
+              >
+                <Send className="w-4 h-4 text-[#161412]" />
+                <span>Send Enquiry</span>
+              </button>
+
+              <div className="text-[11px] text-stone-400 text-center pt-1">
+                🔒 Your inquiry will be forwarded directly to showroom sales staff in Roha.
+              </div>
+            </form>
+          ) : (
+            /* Submission Confirmation State */
+            <div className="py-8 text-center space-y-4 animate-in fade-in">
+              <div className="w-16 h-16 rounded-full bg-emerald-950 border border-emerald-500 text-emerald-400 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+
+              <h3 className="font-serif text-2xl font-bold text-white">
+                Thank You, {name}!
               </h3>
-              <p className="text-xs sm:text-sm text-[#575047] mb-6">
-                Prefer immediate contact? Reach our sales counter directly via phone, WhatsApp, or visit us in Main Bazar Peth.
+
+              <p className="text-sm text-stone-300 max-w-md mx-auto">
+                Your enquiry regarding <strong>{interestedIn}</strong> has been logged for this showroom demo.
               </p>
 
-              <div className="space-y-3">
-                {/* WhatsApp Card */}
+              <div className="p-4 bg-stone-900 rounded-xl border border-stone-700 text-xs text-stone-300 max-w-md mx-auto space-y-2">
+                <span className="font-semibold text-white block">Immediate Response:</span>
+                <p>
+                  To connect with the staff at Main Bazar Peth Roha right away, send this pre-filled message directly to WhatsApp:
+                </p>
                 <a
-                  href={JEWELLER_CONFIG.getWhatsAppUrl()}
+                  href={getForwardWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3.5 rounded-xl bg-[#FAF7F0] hover:bg-[#F3EAD7] border border-[#DECFB3] flex items-center justify-between group transition-colors"
+                  className="w-full py-2.5 px-4 bg-[#25D366] text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-[#1EBE5D] transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#25D366] text-white flex items-center justify-center shrink-0">
-                      <MessageCircle className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#1D1917]">Chat on WhatsApp</div>
-                      <div className="text-[11px] text-[#6B635A]">Instant responses during store hours</div>
-                    </div>
-                  </div>
-                  <span className="text-xs text-[#85611E] font-semibold group-hover:translate-x-0.5 transition-transform">
-                    Chat →
-                  </span>
-                </a>
-
-                {/* Call Card */}
-                <a
-                  href={JEWELLER_CONFIG.getPhoneUrl()}
-                  className="p-3.5 rounded-xl bg-[#FAF7F0] hover:bg-[#F3EAD7] border border-[#DECFB3] flex items-center justify-between group transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#1D1917] text-[#DEC17C] flex items-center justify-center shrink-0">
-                      <Phone className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#1D1917]">Call Now</div>
-                      <div className="text-[11px] text-[#6B635A] font-medium">{JEWELLER_CONFIG.phone}</div>
-                    </div>
-                  </div>
-                  <span className="text-xs text-[#85611E] font-semibold group-hover:translate-x-0.5 transition-transform">
-                    Call →
-                  </span>
-                </a>
-
-                {/* Directions Card */}
-                <a
-                  href={JEWELLER_CONFIG.googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3.5 rounded-xl bg-[#FAF7F0] hover:bg-[#F3EAD7] border border-[#DECFB3] flex items-center justify-between group transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#85611E] text-white flex items-center justify-center shrink-0">
-                      <Navigation className="w-5 h-5 text-[#DEC17C]" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-[#1D1917]">Get Directions</div>
-                      <div className="text-[11px] text-[#6B635A]">Main Bazar Peth, Roha (Raigad)</div>
-                    </div>
-                  </div>
-                  <span className="text-xs text-[#85611E] font-semibold group-hover:translate-x-0.5 transition-transform">
-                    Map →
-                  </span>
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Forward Details to WhatsApp</span>
                 </a>
               </div>
+
+              <button
+                onClick={() => {
+                  setSubmitted(false);
+                  setName('');
+                  setMobile('');
+                  setMessage('');
+                }}
+                className="text-xs text-[#DEC17C] underline hover:text-white pt-2 block mx-auto"
+              >
+                Submit another inquiry
+              </button>
             </div>
+          )}
 
-            {/* Hallmark Trust Note */}
-            <div className="p-4 bg-[#FAF7F0] rounded-xl border border-[#EAE2D2] text-xs text-[#575047] flex items-start gap-2.5">
-              <ShieldCheck className="w-4 h-4 text-[#85611E] shrink-0 mt-0.5" />
-              <div>
-                <span className="font-semibold text-[#1D1917]">Official Showroom Guarantee: </span>
-                Inquiries are answered directly by our store personnel. No third-party middlemen.
-              </div>
+          {/* Section 19: "Or connect with us directly" */}
+          <div className="mt-8 pt-6 border-t border-stone-800 text-center">
+            <span className="text-xs uppercase tracking-wider text-stone-400 font-semibold block mb-3">
+              Or connect with us directly
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <a
+                href={JEWELLER_CONFIG.getPhoneUrl()}
+                className="py-3 px-4 rounded-lg bg-stone-900 hover:bg-stone-800 border border-stone-700 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+              >
+                <Phone className="w-4 h-4 text-[#DEC17C]" />
+                <span>Call Now: {JEWELLER_CONFIG.phone}</span>
+              </a>
+
+              <a
+                href={JEWELLER_CONFIG.getWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-3 px-4 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Chat on WhatsApp</span>
+              </a>
             </div>
-          </div>
-
-          {/* Right Column: Interactive Enquiry Form */}
-          <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-[#E8DFCF] shadow-sm">
-            {!submitted ? (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1D1917] mb-1">
-                  Showroom Inquiry & Appointment
-                </h3>
-                <p className="text-xs text-[#6B635A] mb-4">
-                  Fill in your requirements below. You can also forward this directly to WhatsApp with 1-click.
-                </p>
-
-                {error && (
-                  <div className="p-3 bg-red-50 text-red-700 text-xs rounded-lg border border-red-200 flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{error}</span>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Name */}
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1D1917] uppercase tracking-wider mb-1">
-                      Your Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="e.g. Ramesh Kadam"
-                      className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#D5C6A8] bg-[#FAF7F0]/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#85611E] transition-all"
-                    />
-                  </div>
-
-                  {/* Mobile Number */}
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1D1917] uppercase tracking-wider mb-1">
-                      Mobile Number (10 Digits) *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      value={mobile}
-                      onChange={(e) => setMobile(e.target.value)}
-                      placeholder="e.g. 9876543210"
-                      className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#D5C6A8] bg-[#FAF7F0]/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#85611E] transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Interested In Dropdown */}
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1D1917] uppercase tracking-wider mb-1">
-                      Interested In *
-                    </label>
-                    <select
-                      value={interestedIn}
-                      onChange={(e) => setInterestedIn(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#D5C6A8] bg-[#FAF7F0]/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#85611E] transition-all"
-                    >
-                      {interestOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Preferred Time */}
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1D1917] uppercase tracking-wider mb-1">
-                      Preferred Showroom Visit Time
-                    </label>
-                    <select
-                      value={preferredTime}
-                      onChange={(e) => setPreferredTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#D5C6A8] bg-[#FAF7F0]/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#85611E] transition-all"
-                    >
-                      <option value="Morning (11 AM - 2 PM)">Morning (11 AM – 2 PM)</option>
-                      <option value="Afternoon (2 PM - 5 PM)">Afternoon (2 PM – 5 PM)</option>
-                      <option value="Evening (5 PM - 8 PM)">Evening (5 PM – 8 PM)</option>
-                      <option value="Anytime during store hours">Anytime during store hours</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Message */}
-                <div>
-                  <label className="block text-xs font-semibold text-[#1D1917] uppercase tracking-wider mb-1">
-                    Your Requirements / Message (Optional)
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Specific design preferences, approximate gold weight, or wedding date..."
-                    className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#D5C6A8] bg-[#FAF7F0]/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#85611E] transition-all"
-                  />
-                </div>
-
-                {/* Form Buttons */}
-                <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
-                  <button
-                    type="submit"
-                    className="w-full sm:flex-1 py-3 px-5 bg-[#1D1917] hover:bg-[#342D28] text-white text-sm font-semibold rounded-lg shadow-sm flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Send className="w-4 h-4 text-[#DEC17C]" />
-                    <span>Submit Enquiry</span>
-                  </button>
-
-                  <a
-                    href={getCustomWhatsAppLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto py-3 px-5 bg-[#25D366] hover:bg-[#1EBE5D] text-white text-sm font-semibold rounded-lg shadow-sm flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Forward to WhatsApp</span>
-                  </a>
-                </div>
-
-                <div className="text-[11px] text-[#8E7E70] text-center pt-2">
-                  🔒 We respect your privacy. Your contact details are strictly used to assist your jewellery inquiry.
-                </div>
-              </form>
-            ) : (
-              /* Success / Next Action State */
-              <div className="py-6 text-center space-y-4 animate-in fade-in">
-                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-
-                <h3 className="font-serif text-2xl font-bold text-[#1D1917]">
-                  Thank You, {name}!
-                </h3>
-
-                <p className="text-sm text-[#443E38] max-w-md mx-auto">
-                  Your enquiry for <strong>{interestedIn}</strong> has been received on this demo website.
-                </p>
-
-                <div className="p-4 bg-[#FAF7F0] rounded-xl border border-[#DEC17C] text-xs text-[#664224] text-left max-w-md mx-auto space-y-1.5">
-                  <div className="font-semibold text-[#1D1917]">Instant Direct Connection:</div>
-                  <p>
-                    For instantaneous confirmation from the staff at Main Bazar Peth Roha, tap the button below to send this directly to their WhatsApp:
-                  </p>
-                  <a
-                    href={getCustomWhatsAppLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 w-full py-2.5 px-4 bg-[#25D366] text-white font-medium rounded-lg flex items-center justify-center gap-2 text-xs shadow-sm hover:bg-[#1EBE5D] transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Open WhatsApp with Enquiry Details</span>
-                  </a>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setSubmitted(false);
-                    setName('');
-                    setMobile('');
-                    setMessage('');
-                  }}
-                  className="text-xs text-[#85611E] underline hover:text-[#68491C] pt-2"
-                >
-                  Send another inquiry
-                </button>
-              </div>
-            )}
           </div>
 
         </div>

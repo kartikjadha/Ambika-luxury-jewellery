@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { Sparkles, MessageCircle, Eye, ArrowUpRight, Check, Phone } from 'lucide-react';
+import { Sparkles, MessageCircle, Eye, ArrowUpRight, Check, Phone, Heart } from 'lucide-react';
 import { JEWELLER_CONFIG, JewelleryItem } from '../config/jewellerConfig';
 
 interface CollectionsSectionProps {
   onSelectItem: (item: JewelleryItem) => void;
   onOpenEnquiry: (category?: string) => void;
+  onToggleWishlist?: (id: string) => void;
+  isInWishlist?: (id: string) => boolean;
 }
 
 export const CollectionsSection: React.FC<CollectionsSectionProps> = ({
   onSelectItem,
   onOpenEnquiry,
+  onToggleWishlist,
+  isInWishlist,
 }) => {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
@@ -43,14 +47,13 @@ export const CollectionsSection: React.FC<CollectionsSectionProps> = ({
           </div>
 
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1D1917] tracking-tight">
-            Curated Jewellery Collections
+            Explore Our Collections
           </h2>
           <p className="font-devanagari text-lg sm:text-xl text-[#7B5126] font-medium mt-1">
             आमचे खास सुवर्ण आणि हिऱ्यांचे अलंकार
           </p>
           <p className="text-sm sm:text-base text-[#575047] mt-3">
-            Each creation is an exquisite union of traditional purity and modern grandeur. 
-            All gold jewellery is 100% hallmarked with guaranteed purity.
+            Discover jewellery designs for everyday elegance, celebrations and special occasions.
           </p>
         </div>
 
@@ -98,6 +101,27 @@ export const CollectionsSection: React.FC<CollectionsSectionProps> = ({
                 <div className="absolute top-3 left-3 bg-[#1D1917]/80 backdrop-blur-sm text-white px-2.5 py-1 rounded text-[11px] font-medium tracking-wide">
                   {item.purity}
                 </div>
+
+                {/* Wishlist Heart Toggle Button */}
+                {onToggleWishlist && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleWishlist(item.id);
+                    }}
+                    title={isInWishlist?.(item.id) ? 'Remove from Wishlist' : 'Save to Wishlist'}
+                    aria-label="Wishlist"
+                    className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-[#1D1917] shadow-sm flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                  >
+                    <Heart
+                      className={`w-4 h-4 transition-colors ${
+                        isInWishlist?.(item.id)
+                          ? 'fill-[#C5A038] text-[#C5A038]'
+                          : 'text-[#575047] hover:text-[#C5A038]'
+                      }`}
+                    />
+                  </button>
+                )}
 
                 {/* Quick View Pill on Hover */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -155,17 +179,18 @@ export const CollectionsSection: React.FC<CollectionsSectionProps> = ({
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Enquire on WhatsApp"
-                      className="p-2 text-[#25D366] hover:bg-[#EBFBF0] rounded-lg border border-[#D1F2D9] transition-colors"
+                      className="px-2.5 py-1.5 text-xs text-[#25D366] hover:bg-[#EBFBF0] rounded-lg border border-[#D1F2D9] transition-colors flex items-center gap-1 font-medium"
                     >
-                      <MessageCircle className="w-4 h-4" />
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Enquire Now</span>
                     </a>
 
-                    {/* View & Enquire Button */}
+                    {/* Explore Designs Button */}
                     <button
                       onClick={() => onSelectItem(item)}
-                      className="px-3.5 py-1.5 bg-[#1D1917] hover:bg-[#342D28] text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1 shadow-sm"
+                      className="px-3 py-1.5 bg-[#1D1917] hover:bg-[#342D28] text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1 shadow-sm"
                     >
-                      <span>Enquire</span>
+                      <span>Explore Designs</span>
                       <ArrowUpRight className="w-3.5 h-3.5 text-[#DEC17C]" />
                     </button>
                   </div>

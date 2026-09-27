@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Sparkles, MessageCircle, MapPin, Film } from 'lucide-react';
 import { JEWELLER_CONFIG } from '../config/jewellerConfig';
 
@@ -7,9 +7,20 @@ interface VideoShowcaseProps {
 }
 
 export const VideoShowcase: React.FC<VideoShowcaseProps> = ({ onOpenEnquiry }) => {
+  const [activeVideoIndex, setActiveVideoIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const currentVideo = JEWELLER_CONFIG.videos[activeVideoIndex];
+
+  useEffect(() => {
+    setIsPlaying(false);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.pause();
+    }
+  }, [activeVideoIndex]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -32,7 +43,7 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({ onOpenEnquiry }) =
   };
 
   return (
-    <section id="video" className="py-16 sm:py-20 bg-[#161412] text-white overflow-hidden relative">
+    <section id="videos" className="py-16 sm:py-20 bg-[#161412] text-white overflow-hidden relative">
       {/* Decorative ambient lighting */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#C5A038]/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#85611E]/15 rounded-full blur-3xl pointer-events-none" />
@@ -43,18 +54,35 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({ onOpenEnquiry }) =
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="flex items-center justify-center gap-2 text-xs font-semibold text-[#DEC17C] uppercase tracking-widest mb-2">
             <Film className="w-3.5 h-3.5" />
-            <span>Showroom Experience Film</span>
+            <span>Cinematic Film & Tour</span>
           </div>
 
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#FAF7F0]">
-            {JEWELLER_CONFIG.video.title}
+            Experience Shree Ambika Jewellers
           </h2>
           <p className="font-devanagari text-lg sm:text-xl text-[#DEC17C] font-medium mt-1">
-            {JEWELLER_CONFIG.video.titleMarathi}
+            श्री अंबिका ज्वेलर्सचे भव्य सुवर्ण दालन
           </p>
           <p className="text-sm sm:text-base text-stone-300 mt-3 max-w-xl mx-auto">
-            {JEWELLER_CONFIG.video.subtitle}
+            Take a cinematic journey through our Roha showroom, our artisanal gold work, and our bridal ornaments.
           </p>
+        </div>
+
+        {/* Video Selection Tabs (Video 01, Video 02, Video 03) */}
+        <div className="flex items-center justify-center gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
+          {JEWELLER_CONFIG.videos.map((vid, idx) => (
+            <button
+              key={vid.id}
+              onClick={() => setActiveVideoIndex(idx)}
+              className={`px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                activeVideoIndex === idx
+                  ? 'bg-[#DEC17C] text-[#161412] shadow-md'
+                  : 'bg-stone-800 text-stone-300 hover:bg-stone-700'
+              }`}
+            >
+              {vid.tabLabel}
+            </button>
+          ))}
         </div>
 
         {/* Cinematic Video Player Container */}
@@ -63,8 +91,8 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({ onOpenEnquiry }) =
             
             <video
               ref={videoRef}
-              src={JEWELLER_CONFIG.video.videoUrl}
-              poster={JEWELLER_CONFIG.video.poster}
+              src={currentVideo.videoUrl}
+              poster={currentVideo.poster}
               muted={isMuted}
               loop
               playsInline
@@ -84,10 +112,10 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({ onOpenEnquiry }) =
                 </div>
                 <div className="mt-4 text-center">
                   <span className="font-serif text-lg sm:text-xl font-bold text-white block">
-                    Play Showroom Tour
+                    Play: {currentVideo.title}
                   </span>
                   <span className="text-xs text-[#DEC17C] font-devanagari">
-                    रोहा दालनाची सुवर्ण सफर
+                    {currentVideo.titleMarathi}
                   </span>
                 </div>
               </div>
@@ -113,13 +141,13 @@ export const VideoShowcase: React.FC<VideoShowcaseProps> = ({ onOpenEnquiry }) =
                 </button>
 
                 <span className="text-xs text-stone-300 hidden sm:inline">
-                  Shree Ambika Jewellers • Roha
+                  {currentVideo.title}
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
                 <a
-                  href={JEWELLER_CONFIG.getWhatsAppUrl('Showroom Video Tour & Visit')}
+                  href={JEWELLER_CONFIG.getWhatsAppUrl(`${currentVideo.title} (${currentVideo.tabLabel})`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-3.5 py-1.5 rounded-lg bg-[#25D366] text-white text-xs font-medium flex items-center gap-1.5 hover:bg-[#1EBE5D] transition-colors"

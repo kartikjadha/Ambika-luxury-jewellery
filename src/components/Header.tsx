@@ -1,30 +1,37 @@
 import React, { useState } from 'react';
-import { Phone, MessageCircle, Menu, X, Sparkles, MapPin, Sliders } from 'lucide-react';
+import { Phone, MessageCircle, Menu, X, Sparkles, MapPin, Sliders, Heart } from 'lucide-react';
 import { JEWELLER_CONFIG } from '../config/jewellerConfig';
 
 interface HeaderProps {
   onOpenEnquiry: (category?: string) => void;
   onOpenConfig?: () => void;
+  wishlistCount?: number;
+  onOpenWishlist?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenEnquiry, onOpenConfig }) => {
+export const Header: React.FC<HeaderProps> = ({
+  onOpenEnquiry,
+  onOpenConfig,
+  wishlistCount = 0,
+  onOpenWishlist,
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
+    { label: 'Home', href: '#' },
     { label: 'Collections', href: '#collections' },
-    { label: 'About', href: '#about' },
+    { label: 'About Us', href: '#about' },
     { label: 'Gallery', href: '#gallery' },
-    { label: 'Showroom Video', href: '#video' },
-    { label: 'Trust & Reviews', href: '#reviews' },
+    { label: 'Videos', href: '#videos' },
     { label: 'Visit Us', href: '#visit' },
+    { label: 'Enquire', href: '#enquiry' },
   ];
 
   return (
     <header className="sticky top-0 z-40 bg-[#FCFBF8]/90 backdrop-blur-md border-b border-[#E8DFCF]/70 transition-all duration-200">
       {/* Top subtle notification bar */}
-      <div className="bg-[#1C1815] text-[#E8D9B5] text-[11px] sm:text-xs py-1.5 px-4 text-center tracking-wider uppercase font-medium flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-[#C5A038] animate-pulse" />
-        <span>100% Certified 916 Hallmarked Gold • Main Bazar Peth, Roha</span>
+      <div className="bg-[#1C1815] text-[#E8D9B5] text-[11px] sm:text-xs py-1.5 px-4 text-center tracking-wider font-medium flex items-center justify-center gap-2">
+        <span>✨ Welcome to Shree Ambika Jewellers | Visit Our Showroom in Roha</span>
         <span className="hidden md:inline text-[#C5A038]">|</span>
         <a 
           href={JEWELLER_CONFIG.googleMapsUrl} 
@@ -63,7 +70,24 @@ export const Header: React.FC<HeaderProps> = ({ onOpenEnquiry, onOpenConfig }) =
         </nav>
 
         {/* Zone 3: 1-2 Primary Action Buttons */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Wishlist Button */}
+          {onOpenWishlist && (
+            <button
+              onClick={onOpenWishlist}
+              className="relative p-2 text-[#7B5126] hover:text-[#1D1917] hover:bg-[#F3EAD7] rounded-full transition-colors flex items-center justify-center"
+              title="Saved Wishlist Designs"
+              aria-label="Wishlist"
+            >
+              <Heart className={`w-5 h-5 ${wishlistCount > 0 ? 'fill-[#C5A038] text-[#C5A038]' : 'text-[#7B5126]'}`} />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#1D1917] text-[#FAF7F0] text-[10px] font-bold flex items-center justify-center shadow-xs">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+          )}
+
           {/* Quick Demo Config trigger (for shop owner customization) */}
           {onOpenConfig && (
             <button
@@ -80,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenEnquiry, onOpenConfig }) =
           {/* Call button */}
           <a
             href={JEWELLER_CONFIG.getPhoneUrl()}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#664224] bg-[#F7F2E6] hover:bg-[#EFE5D0] border border-[#DECFB3] rounded-lg transition-colors whitespace-nowrap"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#664224] bg-[#F7F2E6] hover:bg-[#EFE5D0] border border-[#DECFB3] rounded-lg transition-colors whitespace-nowrap"
           >
             <Phone className="w-3.5 h-3.5 text-[#85611E]" />
             <span>Call Showroom</span>
@@ -89,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenEnquiry, onOpenConfig }) =
           {/* Primary Enquire button */}
           <button
             onClick={() => onOpenEnquiry()}
-            className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 text-xs sm:text-sm font-medium text-white bg-[#1D1917] hover:bg-[#342D28] rounded-lg shadow-sm hover:shadow transition-all whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white bg-[#1D1917] hover:bg-[#342D28] rounded-lg shadow-sm hover:shadow transition-all whitespace-nowrap"
           >
             <MessageCircle className="w-4 h-4 text-[#DEC17C]" />
             <span>Enquire Now</span>
@@ -110,6 +134,25 @@ export const Header: React.FC<HeaderProps> = ({ onOpenEnquiry, onOpenConfig }) =
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#FCFBF8] border-b border-[#E8DFCF] px-5 py-6 shadow-xl animate-in slide-in-from-top duration-200">
           <div className="flex flex-col gap-4 text-base font-medium text-[#2C2723]">
+            {/* Wishlist Shortcut in Mobile Menu */}
+            {onOpenWishlist && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenWishlist();
+                }}
+                className="py-2 px-3 bg-[#FAF7F0] border border-[#DECFB3] rounded-lg flex items-center justify-between text-[#1D1917]"
+              >
+                <div className="flex items-center gap-2">
+                  <Heart className={`w-4 h-4 ${wishlistCount > 0 ? 'fill-[#C5A038] text-[#C5A038]' : 'text-[#7B5126]'}`} />
+                  <span className="text-sm font-semibold">Saved Wishlist</span>
+                </div>
+                <span className="text-xs bg-[#1D1917] text-white px-2 py-0.5 rounded-full font-bold">
+                  {wishlistCount}
+                </span>
+              </button>
+            )}
+
             {navLinks.map((link) => (
               <a
                 key={link.label}
